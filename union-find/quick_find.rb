@@ -1,6 +1,6 @@
 require File.join(File.dirname(File.path(__FILE__)), "uf")
 
-class QuickFindUF < UF
+class QuickFind < UF
 
   def connected(p, q)
     id[p] == id[q]
