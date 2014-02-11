@@ -6,7 +6,7 @@ class WeightedQuickUnion < UF
 
   def initialize(size)
     super
-    @sz = size.times.map(&:to_i)
+    @sz = [1] * size
   end
 
   def connected(p, q)
