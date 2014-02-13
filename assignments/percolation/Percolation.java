@@ -28,7 +28,7 @@ public class Percolation {
 
   // is site (row i, column j) full?
   public boolean isFull(int i, int j) {
-    return isValidBounds(i,j) && !isOpen(i, j);
+    return isValidBounds(i, j) && !isOpen(i, j);
   }
 
   // does the system percolate?
@@ -43,7 +43,9 @@ public class Percolation {
 
   public void print() {
     System.out.print("  ");
-    for (int i = 0; i < N; i++) System.out.print(Integer.toString(i) + " ");
+    for (int i = 0; i < N; i++) {
+      System.out.print(Integer.toString(i) + " ");
+    }
     System.out.print("\n");
 
     for (int i = 0; i < N; i++) {

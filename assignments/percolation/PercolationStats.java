@@ -16,7 +16,7 @@ public class PercolationStats {
 
     int count = 0;
     Random generator = new Random(System.currentTimeMillis());
-    while(!percolation.percolates()) {
+    while (!percolation.percolates()) {
       int p = generator.nextInt(N);
       int q = generator.nextInt(N);
 
