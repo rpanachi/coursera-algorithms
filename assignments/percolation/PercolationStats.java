@@ -2,8 +2,8 @@ import java.util.Random;
 
 public class PercolationStats {
 
-  public int N;
-  public int T;
+  private int N;
+  private int T;
   private double[] thresholds;
   private double mean = 0.0;
   private double stddev = 0.0;
@@ -18,14 +18,17 @@ public class PercolationStats {
     this.T = T;
     this.thresholds = new double[T];
 
+    double N2 = (N * N);
+
     for (int t = 0; t < this.T; t++) {
-      this.thresholds[t] = ((double) doPercolation()) / (N * N);
+      this.thresholds[t] = ((double) doMonteCarloSimulation()) / N2;
     }
 
     this.mean = StdStats.mean(thresholds);
     this.stddev = StdStats.stddev(thresholds);
-    this.confidenceLo = this.mean - ((1.96 * this.stddev) / Math.sqrt(T));
-    this.confidenceHi = this.mean + ((1.96 * this.stddev) / Math.sqrt(T));
+    double u = ((1.96 * this.stddev) / Math.sqrt(T));
+    this.confidenceLo = this.mean - u;
+    this.confidenceHi = this.mean + u;
   }
 
   // sample mean of percolation threshold
@@ -48,7 +51,7 @@ public class PercolationStats {
     return this.confidenceHi;
   }
 
-  public int doPercolation() {
+  public int doMonteCarloSimulation() {
     Percolation percolation = new Percolation(N);
     Random generator = new Random(System.currentTimeMillis());
 

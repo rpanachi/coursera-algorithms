@@ -14,22 +14,14 @@ public class Percolation {
   // open site (row i, column j) if it is not already
   public void open(int i, int j) {
     if (!isValidBounds(i, j)) return;
-    if (!isFull(i, j)) return;
+    if (isOpen(i, j)) return;
 
     this.sites[index(i, j)] = true;
 
-    if (isValidBounds(i, j-1) && isOpen(i, j-1)) {
-      this.wquuf.union(index(i, j), index(i, j-1));
-    }
-    if (isValidBounds(i, j+1) && isOpen(i, j+1)) {
-      this.wquuf.union(index(i, j), index(i, j+1));
-    }
-    if (isValidBounds(i-1, j) && isOpen(i-1, j)) {
-      this.wquuf.union(index(i-1, j), index(i, j));
-    }
-    if (isValidBounds(i+1, j) && isOpen(i+1, j)) {
-      this.wquuf.union(index(i+1, j), index(i, j));
-    }
+    if (isOpen(i, j-1)) this.wquuf.union(index(i, j), index(i, j-1));
+    if (isOpen(i, j+1)) this.wquuf.union(index(i, j), index(i, j+1));
+    if (isOpen(i-1, j)) this.wquuf.union(index(i-1, j), index(i, j));
+    if (isOpen(i+1, j)) this.wquuf.union(index(i+1, j), index(i, j));
   }
 
   // is site (row i, column j) open?
