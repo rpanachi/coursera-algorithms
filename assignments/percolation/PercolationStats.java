@@ -2,8 +2,8 @@ import java.util.Random;
 
 public class PercolationStats {
 
-  private int N;
-  private int T;
+  public int N;
+  public int T;
   private double[] thresholds;
   private double mean = 0.0;
   private double stddev = 0.0;
@@ -18,16 +18,13 @@ public class PercolationStats {
     this.T = T;
     this.thresholds = new double[T];
 
-    for(int t = 0; t < T; t++) {
-      this.thresholds[t] = ((double)doPercolation()) / (N * N);
+    for (int t = 0; t < this.T; t++) {
+      this.thresholds[t] = ((double) doPercolation()) / (N * N);
     }
 
     this.mean = StdStats.mean(thresholds);
-
     this.stddev = StdStats.stddev(thresholds);
-
     this.confidenceLo = this.mean - ((1.96 * this.stddev) / Math.sqrt(T));
-
     this.confidenceHi = this.mean + ((1.96 * this.stddev) / Math.sqrt(T));
   }
 
@@ -96,6 +93,7 @@ public class PercolationStats {
 
     System.out.println("mean                    = " + ps.mean());
     System.out.println("stddev                  = " + ps.stddev());
-    System.out.println("95% confidence interval = " + ps.confidenceLo() + ", " + ps.confidenceHi());
+    System.out.println("95% confidence interval = "
+        + ps.confidenceLo() + ", " + ps.confidenceHi());
   }
 }

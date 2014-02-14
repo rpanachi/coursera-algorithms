@@ -14,14 +14,22 @@ public class Percolation {
   // open site (row i, column j) if it is not already
   public void open(int i, int j) {
     if (!isValidBounds(i, j)) return;
-    if (isFull(i, j)) {
-      this.sites[index(i, j)] = true;
-    }
+    if (!isFull(i, j)) return;
 
-    if (isValidBounds(i, j-1) && isOpen(i, j-1)) this.wquuf.union(index(i, j), index(i, j-1));
-    if (isValidBounds(i, j+1) && isOpen(i, j+1)) this.wquuf.union(index(i, j), index(i, j+1));
-    if (isValidBounds(i-1, j) && isOpen(i-1, j)) this.wquuf.union(index(i-1, j), index(i, j));
-    if (isValidBounds(i+1, j) && isOpen(i+1, j)) this.wquuf.union(index(i+1, j), index(i, j));
+    this.sites[index(i, j)] = true;
+
+    if (isValidBounds(i, j-1) && isOpen(i, j-1)) {
+      this.wquuf.union(index(i, j), index(i, j-1));
+    }
+    if (isValidBounds(i, j+1) && isOpen(i, j+1)) {
+      this.wquuf.union(index(i, j), index(i, j+1));
+    }
+    if (isValidBounds(i-1, j) && isOpen(i-1, j)) {
+      this.wquuf.union(index(i-1, j), index(i, j));
+    }
+    if (isValidBounds(i+1, j) && isOpen(i+1, j)) {
+      this.wquuf.union(index(i+1, j), index(i, j));
+    }
   }
 
   // is site (row i, column j) open?
@@ -31,7 +39,7 @@ public class Percolation {
 
   // is site (row i, column j) full?
   public boolean isFull(int i, int j) {
-    return isValidBounds(i, j) && !isOpen(i, j);
+    return isValidBounds(i, j) && !this.sites[index(i, j)];
   }
 
   // does the system percolate?
