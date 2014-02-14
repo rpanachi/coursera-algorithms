@@ -4,7 +4,11 @@ public class PercolationStats {
 
   private int N;
   private int T;
-  private Percolation percolation;
+  private double[] thresholds;
+  private double mean = 0.0;
+  private double stddev = 0.0;
+  private double confidenceLo = 0.0;
+  private double confidenceHi = 0.0;
 
   // perform T independent computational experiments on an N-by-N grid
   public PercolationStats(int N, int T) {
@@ -12,43 +16,75 @@ public class PercolationStats {
 
     this.N = N;
     this.T = T;
-    this.percolation = new Percolation(N);
+    this.thresholds = new double[T];
 
-    int count = 0;
-    Random generator = new Random(System.currentTimeMillis());
-    while (!percolation.percolates()) {
-      int p = generator.nextInt(N);
-      int q = generator.nextInt(N);
-
-      if (this.percolation.isFull(p, q)) {
-        this.percolation.open(p, q);
-        count++;
-      }
+    for(int t = 0; t < T; t++) {
+      this.thresholds[t] = ((double)doPercolation()) / (N * N);
     }
 
-    System.out.println("Percolate after " + count + " iterations");
-    this.percolation.print();
+    this.mean = StdStats.mean(thresholds);
 
+    this.stddev = StdStats.stddev(thresholds);
+
+    this.confidenceLo = this.mean - ((1.96 * this.stddev) / Math.sqrt(T));
+
+    this.confidenceHi = this.mean + ((1.96 * this.stddev) / Math.sqrt(T));
   }
 
   // sample mean of percolation threshold
   public double mean() {
-    return 0.0;
+    return this.mean;
   }
 
   // sample standard deviation of percolation threshold
   public double stddev() {
-    return 0.0;
+    return this.stddev;
   }
 
   // returns lower bound of the 95% confidence interval
   public double confidenceLo() {
-    return 0.0;
+    return this.confidenceLo;
   }
 
   // returns upper bound of the 95% confidence interval
   public double confidenceHi() {
-    return 0.0;
+    return this.confidenceHi;
+  }
+
+  public int doPercolation() {
+    Percolation percolation = new Percolation(N);
+    Random generator = new Random(System.currentTimeMillis());
+
+    int openSites = 0;
+    while (!percolation.percolates()) {
+      int p = generator.nextInt(N);
+      int q = generator.nextInt(N);
+      if (percolation.isFull(p, q)) {
+        percolation.open(p, q);
+        openSites++;
+      }
+    }
+    return openSites;
+  }
+
+  public void draw(Percolation percolation) {
+    System.out.print("  ");
+    for (int i = 0; i < N; i++) {
+      System.out.print(Integer.toString(i) + " ");
+    }
+    System.out.print("\n");
+
+    for (int i = 0; i < N; i++) {
+      System.out.print(Integer.toString(i) + " ");
+      for (int j = 0; j < N; j++) {
+        if (percolation.isOpen(i, j)) {
+          System.out.print(". ");
+        } else {
+          System.out.print("# ");
+        }
+      }
+      System.out.print("\n");
+    }
   }
 
   // test client, described below
@@ -57,5 +93,9 @@ public class PercolationStats {
     int T = new Integer(args[1]);
 
     PercolationStats ps = new PercolationStats(N, T);
+
+    System.out.println("mean                    = " + ps.mean());
+    System.out.println("stddev                  = " + ps.stddev());
+    System.out.println("95% confidence interval = " + ps.confidenceLo() + ", " + ps.confidenceHi());
   }
 }
