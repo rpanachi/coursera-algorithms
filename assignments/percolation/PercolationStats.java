@@ -51,7 +51,7 @@ public class PercolationStats {
     return this.confidenceHi;
   }
 
-  public int doMonteCarloSimulation() {
+  private int doMonteCarloSimulation() {
     Percolation percolation = new Percolation(N);
     Random generator = new Random(System.currentTimeMillis());
 
@@ -67,7 +67,7 @@ public class PercolationStats {
     return openSites;
   }
 
-  public void draw(Percolation percolation) {
+  private void draw(Percolation percolation) {
     System.out.print("  ");
     for (int i = 0; i < N; i++) {
       System.out.print(Integer.toString(i) + " ");
