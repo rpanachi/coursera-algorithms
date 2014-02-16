@@ -59,7 +59,7 @@ public class PercolationStats {
     while (!percolation.percolates()) {
       int p = generator.nextInt(N) + 1;
       int q = generator.nextInt(N) + 1;
-      if (percolation.isFull(p, q)) {
+      if (!percolation.isOpen(p, q)) {
         percolation.open(p, q);
         openSites++;
       }

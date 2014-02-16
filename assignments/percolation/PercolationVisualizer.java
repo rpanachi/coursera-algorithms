@@ -16,13 +16,12 @@
  *
  ****************************************************************************/
 
-import java.util.Random;
 import java.awt.Font;
 
 public class PercolationVisualizer {
 
     // delay in miliseconds (controls animation speed)
-    private static final int DELAY = 50;
+    private static final int DELAY = 100;
 
     // draw N-by-N percolation system
     public static void draw(Percolation perc, int N) {
@@ -60,9 +59,8 @@ public class PercolationVisualizer {
     }
 
     public static void main(String[] args) {
-
-        // N-by-N percolation system
-        int N = new Integer(args[0]);
+        In in = new In(args[0]);      // input file
+        int N = in.readInt();         // N-by-N percolation system
 
         // turn on animation mode
         StdDraw.show(0);
@@ -71,11 +69,9 @@ public class PercolationVisualizer {
         Percolation perc = new Percolation(N);
         draw(perc, N);
         StdDraw.show(DELAY);
-
-        Random generator = new Random(System.currentTimeMillis());
-        while (!perc.percolates()) {
-            int i = generator.nextInt(N);
-            int j = generator.nextInt(N);
+        while (!in.isEmpty()) {
+            int i = in.readInt();
+            int j = in.readInt();
             perc.open(i, j);
             draw(perc, N);
             StdDraw.show(DELAY);

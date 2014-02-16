@@ -54,7 +54,7 @@ public class Percolation {
   // is site (row i, column j) full?
   public boolean isFull(int row, int column) {
     this.validateBounds(row, column);
-    return !this.isSiteOpen(row, column);
+    return this.wquuf.connected(index(row, column), 0);
   }
 
   // does the system percolate?
