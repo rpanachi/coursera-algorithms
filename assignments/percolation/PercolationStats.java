@@ -57,8 +57,8 @@ public class PercolationStats {
 
     int openSites = 0;
     while (!percolation.percolates()) {
-      int p = generator.nextInt(N);
-      int q = generator.nextInt(N);
+      int p = generator.nextInt(N) + 1;
+      int q = generator.nextInt(N) + 1;
       if (percolation.isFull(p, q)) {
         percolation.open(p, q);
         openSites++;
@@ -85,6 +85,10 @@ public class PercolationStats {
       }
       System.out.print("\n");
     }
+  }
+
+  private void puts(Object o) {
+    System.out.println("" + o);
   }
 
   // test client, described below
