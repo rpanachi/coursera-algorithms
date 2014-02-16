@@ -69,14 +69,14 @@ public class PercolationStats {
 
   private void draw(Percolation percolation) {
     System.out.print("  ");
-    for (int i = 0; i < N; i++) {
+    for (int i = 1; i <= N; i++) {
       System.out.print(Integer.toString(i) + " ");
     }
     System.out.print("\n");
 
-    for (int i = 0; i < N; i++) {
+    for (int i = 1; i <= N; i++) {
       System.out.print(Integer.toString(i) + " ");
-      for (int j = 0; j < N; j++) {
+      for (int j = 1; j <= N; j++) {
         if (percolation.isOpen(i, j)) {
           System.out.print(". ");
         } else {

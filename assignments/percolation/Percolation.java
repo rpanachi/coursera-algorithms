@@ -7,64 +7,69 @@ public class Percolation {
   // create N-by-N grid, with all sites blocked
   public Percolation(int N) {
     this.N = N;
-    this.wquuf = new WeightedQuickUnionUF(N * N);
-    this.sites = new boolean[N * N];
+    this.wquuf = new WeightedQuickUnionUF(N * N + 2);
+    this.sites = new boolean[N * N + 2];
+    this.sites[0] = true;
+    this.sites[N * N + 1] = true;
   }
 
   // open site (row i, column j) if it is not already
-  public void open(int row, int column) {
-    int i = row - 1;
-    int j = column - 1;
-
+  public void open(int i, int j) {
     this.validateBounds(i, j);
     if (this.isSiteOpen(i, j)) return;
 
-    this.sites[index(i, j)] = true;
+    int cell = index(i, j);
+    this.sites[cell] = true;
 
-    if (isValidBounds(i, j-1) && isSiteOpen(i, j-1)) {
-      this.wquuf.union(index(i, j), index(i, j-1));
+    //if not top row
+    if (i != 1 && isOpen(i-1, j)) {
+      union(index(i-1, j), cell);
+    } else if (i == 1) {
+      //connect to virtual top cell
+      union(cell, 0);
     }
-    if (isValidBounds(i, j+1) && isSiteOpen(i, j+1)) {
-      this.wquuf.union(index(i, j), index(i, j+1));
+    //if not bottom row
+    if (i != N && isOpen(i+1, j)) {
+      union(index(i+1, j), cell);
+    } else if (i == N) {
+      //connect to virtual bottom cell
+      union(cell, N * N + 1);
     }
-    if (isValidBounds(i-1, j) && isSiteOpen(i-1, j)) {
-      this.wquuf.union(index(i-1, j), index(i, j));
+    //if not left border
+    if (j != 1 && isOpen(i, j-1)) {
+      union(index(i, j-1), cell);
     }
-    if (isValidBounds(i+1, j) && isSiteOpen(i+1, j)) {
-      this.wquuf.union(index(i+1, j), index(i, j));
+    //if not right border
+    if (j != N && isOpen(i, j+1)) {
+      union(index(i, j+1), cell);
     }
   }
 
   // is site (row i, column j) open?
   public boolean isOpen(int row, int column) {
-    int i = row - 1;
-    int j = column - 1;
-
-    this.validateBounds(i, j);
-    return this.isSiteOpen(i, j);
+    this.validateBounds(row, column);
+    return this.isSiteOpen(row, column);
   }
 
   // is site (row i, column j) full?
   public boolean isFull(int row, int column) {
-    int i = row - 1;
-    int j = column - 1;
-
-    this.validateBounds(i, j);
-    return !this.sites[index(i, j)];
+    this.validateBounds(row, column);
+    return !this.sites[index(row, column)];
   }
 
   // does the system percolate?
   public boolean percolates() {
-    for (int i = 0; i < N; i++) {
-      for (int j = 0; j < N; j++) {
-        if (this.wquuf.connected(index(0, i), index(N - 1, j))) return true;
-      }
+    return this.wquuf.connected(0, N * N + 1);
+  }
+
+  private void union(int i, int j) {
+    if (!this.wquuf.connected(i, j)) {
+      this.wquuf.union(i, j);
     }
-    return false;
   }
 
   private boolean isValidBounds(int i, int j) {
-     return i >= 0 && i < N && j >= 0 && j < N;
+     return i > 0 && i <= N && j > 0 && j <= N;
   }
 
   private void validateBounds(int i, int j) {
@@ -78,7 +83,7 @@ public class Percolation {
   }
 
   private int index(int row, int column) {
-    return (row * N) + column;
+    return ((row - 1) * N) + column;
   }
 
   private void puts(Object o) {
